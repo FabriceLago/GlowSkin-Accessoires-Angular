@@ -1,0 +1,61 @@
+<section class="relative flex h-[70vh] min-h-[440px] items-end overflow-hidden bg-brun">
+  <img [src]="IMG.eucalyptusBunch.url" [alt]="IMG.eucalyptusBunch.alt" class="absolute inset-0 h-full w-full object-cover opacity-70" />
+  <div class="absolute inset-0 bg-gradient-to-t from-brun/90 via-brun/20 to-transparent"></div>
+  <div class="container-editorial relative pb-16 pt-32 text-ivory">
+    <p class="text-xs uppercase tracking-[0.3em] text-dore" appFadeUp>Le Rituel</p>
+    <h1 class="mt-4 max-w-xl font-serif text-4xl leading-tight sm:text-5xl" appFadeUp="120">
+      Un manifeste pour ralentir
+    </h1>
+  </div>
+</section>
+
+<section class="container-editorial py-20 sm:py-28">
+  <div class="mx-auto max-w-2xl text-center" appFadeUp>
+    <p class="font-serif italic text-2xl leading-relaxed text-brun sm:text-3xl">
+      « Nous croyons que le soin de la peau commence par un geste, pas par un produit. GlowSkin existe pour redonner de la lenteur à un rituel trop souvent expédié. »
+    </p>
+  </div>
+</section>
+
+<section class="bg-sauge-light/20 py-20 sm:py-28">
+  <div class="container-editorial text-center" appFadeUp>
+    <p class="eyebrow">La méthode</p>
+    <h2 class="mt-3 font-serif text-3xl text-brun sm:text-4xl">Trois gestes, chaque jour</h2>
+  </div>
+  <div class="container-editorial mt-14 grid gap-10 sm:grid-cols-3">
+    @for (step of methodSteps; track step.number) {
+      <div class="text-center" appFadeUp>
+        <span class="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-dore font-serif italic text-xl text-dore">{{ step.number }}</span>
+        <h3 class="mt-4 font-serif text-xl text-brun">{{ step.title }}</h3>
+        <p class="mt-3 text-sm leading-relaxed text-brun/70">{{ step.text }}</p>
+      </div>
+    }
+  </div>
+</section>
+
+<section class="container-editorial py-20 sm:py-28">
+  <div class="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
+    <div class="aspect-[4/5] overflow-hidden rounded-xl2 shadow-diffuse" appFadeUp>
+      <img [src]="IMG.clayHandsShaping.url" [alt]="IMG.clayHandsShaping.alt" class="h-full w-full object-cover" />
+    </div>
+    <div appFadeUp>
+      <p class="eyebrow">Nos engagements</p>
+      <h2 class="mt-3 font-serif text-3xl text-brun sm:text-4xl">Ce qui ne change jamais</h2>
+      <div class="mt-8 space-y-6">
+        @for (item of commitments; track item.title) {
+          <div class="border-t border-dore/20 pt-5">
+            <h3 class="font-serif text-lg text-brun">{{ item.title }}</h3>
+            <p class="mt-1.5 text-sm leading-relaxed text-brun/70">{{ item.text }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-brun py-20 text-center text-ivory sm:py-24">
+  <div class="container-editorial" appFadeUp>
+    <h2 class="font-serif text-3xl sm:text-4xl">Prête à commencer votre rituel ?</h2>
+    <a routerLink="/boutique" class="btn-primary mt-6 bg-dore text-brun hover:bg-dore-light">Découvrir la boutique</a>
+  </div>
+</section>

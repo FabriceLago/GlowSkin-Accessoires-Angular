@@ -1,0 +1,204 @@
+<!-- 1. Hero -->
+<section class="relative flex h-[92vh] min-h-[560px] items-end overflow-hidden bg-brun">
+  <img
+    [src]="IMG.heroJadeRollerFace.url"
+    [alt]="IMG.heroJadeRollerFace.alt"
+    class="absolute inset-0 h-full w-full origin-center animate-kenBurns object-cover opacity-80"
+  />
+  <div class="absolute inset-0 bg-gradient-to-t from-brun/90 via-brun/20 to-transparent"></div>
+
+  <div class="container-editorial relative pb-20 pt-32 text-ivory sm:pb-24">
+    <p class="text-xs uppercase tracking-[0.3em] text-dore" appFadeUp>GlowSkin Accessoires</p>
+    <h1 class="mt-4 max-w-2xl font-serif text-5xl leading-[1.05] sm:text-6xl lg:text-7xl" appFadeUp="120">
+      Le geste avant<br />le produit.
+    </h1>
+    <p class="mt-6 max-w-md text-ivory/80" appFadeUp="240">
+      Des accessoires de soin naturels pour ralentir, respirer, et retrouver un rituel beauté sensoriel — sans promesse, sans artifice.
+    </p>
+    <div class="mt-8 flex flex-wrap gap-4" appFadeUp="360">
+      <a routerLink="/boutique" class="btn-primary bg-dore text-brun hover:bg-dore-light">Découvrir</a>
+      <a routerLink="/le-rituel" class="btn-secondary border-ivory/40 text-ivory hover:border-ivory hover:bg-ivory hover:text-brun">Nos rituels</a>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Bandeau réassurance -->
+<div class="group overflow-hidden border-y border-dore/20 bg-sable py-3.5">
+  <div class="flex w-max gap-14 whitespace-nowrap [animation-play-state:running] group-hover:[animation-play-state:paused]" style="animation: marqueeGlobal 90s linear infinite;">
+    @for (group of [0, 1]; track group) {
+      @for (item of reassuranceStrip; track $index) {
+        <span class="flex items-center gap-3 text-[11px] uppercase tracking-[0.2em] text-brun/60">
+          {{ item }}
+          <span class="h-3 w-px bg-dore/40"></span>
+        </span>
+      }
+    }
+  </div>
+</div>
+
+<!-- 3. Best-sellers -->
+<section class="container-editorial py-20 sm:py-28">
+  <div class="flex items-end justify-between" appFadeUp>
+    <div>
+      <p class="eyebrow">Les préférés</p>
+      <h2 class="mt-3 font-serif text-3xl text-brun sm:text-4xl">Nos best-sellers</h2>
+    </div>
+    <a routerLink="/boutique" class="hidden text-sm text-brun/60 underline underline-offset-4 hover:text-brun sm:block">Voir tout</a>
+  </div>
+
+  <div class="mt-10 grid gap-x-6 gap-y-12 lg:grid-cols-12 lg:gap-8">
+    <div class="lg:col-span-7" appFadeUp>
+      <app-product-card [product]="bestSellers[0]" [featured]="true" />
+    </div>
+    <div class="grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 lg:col-span-5 lg:grid-cols-1 lg:gap-y-10">
+      @for (product of bestSellers.slice(1); track product.id) {
+        <div appFadeUp>
+          <app-product-card [product]="product" />
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- 4. Rituel éditorial -->
+<section class="bg-sauge-light/20">
+  <div class="container-editorial grid gap-10 py-20 sm:py-28 lg:grid-cols-2 lg:gap-16">
+    <div class="lg:sticky lg:top-28 lg:self-start">
+      <div class="aspect-[4/5] overflow-hidden rounded-xl2 shadow-diffuse">
+        <img [src]="IMG.handLotionRoller.url" [alt]="IMG.handLotionRoller.alt" class="h-full w-full object-cover" />
+      </div>
+    </div>
+    <div class="flex flex-col justify-center">
+      <p class="eyebrow">La méthode</p>
+      <h2 class="mt-3 font-serif text-3xl text-brun sm:text-4xl">Votre rituel en trois gestes</h2>
+      <div class="relative mt-10 space-y-10">
+        <div class="absolute left-6 top-6 bottom-6 w-px bg-dore/25"></div>
+        @for (step of ritualSteps; track step.number) {
+          <div class="relative flex gap-6" appFadeUp>
+            <span class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-dore bg-sauge-light/40 font-serif italic text-lg text-dore">{{ step.number }}</span>
+            <div class="pt-1.5">
+              <h3 class="font-serif text-xl text-brun">{{ step.title }}</h3>
+              <p class="mt-2 max-w-md text-sm leading-relaxed text-brun/70">{{ step.text }}</p>
+            </div>
+          </div>
+        }
+      </div>
+      <a routerLink="/le-rituel" class="btn-secondary mt-8 self-start">Découvrir le rituel complet</a>
+    </div>
+  </div>
+</section>
+
+<!-- 5. Nos matériaux -->
+<section class="container-editorial py-20 sm:py-28">
+  <div class="text-center" appFadeUp>
+    <p class="eyebrow">Matière première</p>
+    <h2 class="mt-3 font-serif text-3xl text-brun sm:text-4xl">Nos matériaux</h2>
+  </div>
+
+  <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-12">
+    @for (material of materials; track material.name; let i = $index) {
+      <div
+        class="group relative overflow-hidden rounded-xl2"
+        [class]="i % 2 === 0 ? 'aspect-[3/4] lg:col-span-7 lg:aspect-[16/10]' : 'aspect-[3/4] lg:col-span-5'"
+        appFadeUp
+      >
+        <img [src]="material.image.url" [alt]="material.image.alt" class="h-full w-full object-cover transition-transform duration-700 ease-out-smooth group-hover:scale-105" />
+        <div class="absolute inset-0 bg-gradient-to-t from-brun/85 via-brun/10 to-transparent"></div>
+        <div class="absolute inset-x-0 bottom-0 p-5 text-ivory">
+          <h3 class="font-serif text-xl">{{ material.name }}</h3>
+          <p class="mt-1 text-xs leading-relaxed text-ivory/80">{{ material.desc }}</p>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- 6. Avis clients -->
+<section class="bg-brun py-20 text-ivory sm:py-28">
+  <div class="container-editorial text-center" appFadeUp>
+    <p class="text-xs uppercase tracking-[0.3em] text-dore">Elles témoignent</p>
+    <h2 class="mt-3 font-serif text-3xl sm:text-4xl">Ce qu'elles en disent</h2>
+  </div>
+
+  <div class="container-editorial mt-12 grid gap-8 sm:grid-cols-3">
+    @for (t of testimonials; track t.id) {
+      <div class="flex flex-col items-center rounded-xl2 border border-ivory/10 p-8 text-center" appFadeUp>
+        <img [src]="t.image.url" [alt]="t.image.alt" class="h-16 w-16 rounded-full object-cover" />
+        <app-rating-stars [rating]="t.rating" [size]="14" />
+        <p class="mt-4 font-serif italic text-lg leading-relaxed text-ivory/90">{{ t.quote }}</p>
+        <p class="mt-4 text-sm text-ivory/60">{{ t.name }} — {{ t.role }}</p>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- 7. Avant / après -->
+<section class="container-editorial py-20 sm:py-28">
+  <div class="text-center" appFadeUp>
+    <p class="eyebrow">Résultats honnêtes</p>
+    <h2 class="mt-3 font-serif text-3xl text-brun sm:text-4xl">Avant / après, en vrai</h2>
+    <p class="mx-auto mt-3 max-w-lg text-sm text-brun/60">
+      Un teint plus reposé, des traits détendus — l'effet d'un rituel régulier, pas d'une promesse miracle.
+    </p>
+  </div>
+
+  <div class="relative mx-auto mt-10 aspect-[16/9] max-w-3xl select-none overflow-hidden rounded-xl2 shadow-diffuse" appFadeUp>
+    <img [src]="IMG.portraitFreckles1.url" [alt]="'Avant : ' + IMG.portraitFreckles1.alt" class="absolute inset-0 h-full w-full object-cover" />
+    <div class="absolute inset-0 overflow-hidden" [style.width.%]="beforeAfterPosition()">
+      <img [src]="IMG.portraitFreckles2.url" [alt]="'Après : ' + IMG.portraitFreckles2.alt" class="h-full w-full object-cover" [style.width]="(10000 / beforeAfterPosition()) + '%'" />
+    </div>
+    <div class="pointer-events-none absolute inset-y-0 w-0.5 bg-ivory" [style.left.%]="beforeAfterPosition()"></div>
+    <span class="pointer-events-none absolute left-4 top-4 rounded-full bg-brun/70 px-3 py-1 text-xs text-ivory">Avant</span>
+    <span class="pointer-events-none absolute right-4 top-4 rounded-full bg-brun/70 px-3 py-1 text-xs text-ivory">Après</span>
+    <input
+      type="range"
+      min="0"
+      max="100"
+      class="absolute inset-x-0 bottom-3 mx-auto w-[90%] accent-dore"
+      [value]="beforeAfterPosition()"
+      (input)="beforeAfterPosition.set(+$any($event.target).value)"
+      aria-label="Curseur avant après"
+    />
+  </div>
+</section>
+
+<!-- 8. Grille Instagram -->
+<section class="bg-sable py-20 sm:py-28">
+  <div class="container-editorial text-center" appFadeUp>
+    <p class="eyebrow">Suivez-nous</p>
+    <h2 class="mt-3 font-serif text-3xl text-brun sm:text-4xl">&#64;glowskin.accessoires</h2>
+  </div>
+  <div class="container-editorial mt-10 grid grid-cols-3 gap-2 sm:gap-4">
+    @for (img of instagramImages; track img.url) {
+      <div class="group aspect-square overflow-hidden rounded-lg sm:rounded-xl2">
+        <img [src]="img.url" [alt]="img.alt" class="h-full w-full object-cover transition-transform duration-500 ease-out-smooth group-hover:scale-110" />
+      </div>
+    }
+  </div>
+  <div class="mt-8 text-center">
+    <a href="https://instagram.com" target="_blank" rel="noopener" class="text-sm text-brun/60 underline underline-offset-4 hover:text-brun">Voir plus sur Instagram</a>
+  </div>
+</section>
+
+<!-- 9. Newsletter -->
+<section class="container-editorial py-20 sm:py-28">
+  <div class="mx-auto max-w-xl rounded-xl2 bg-terracotta/10 p-10 text-center sm:p-14" appFadeUp>
+    <p class="eyebrow">Offre de bienvenue</p>
+    <h2 class="mt-3 font-serif text-3xl text-brun">-10% sur votre première commande</h2>
+    <p class="mt-3 text-sm text-brun/60">Inscrivez-vous pour recevoir le code, nos nouveautés et quelques conseils de rituel.</p>
+    <form (submit)="onNewsletterSubmit($event)" class="mt-6 flex flex-col gap-3 sm:flex-row">
+      <input
+        type="email"
+        required
+        placeholder="Votre adresse e-mail"
+        class="w-full rounded-full border border-brun/15 bg-ivory px-5 py-3 text-sm text-brun placeholder:text-brun/40 focus:border-dore focus:outline-none"
+        [value]="newsletterEmail()"
+        (input)="newsletterEmail.set($any($event.target).value)"
+      />
+      <button type="submit" class="btn-primary shrink-0">S'inscrire</button>
+    </form>
+    @if (newsletterSubmitted()) {
+      <p class="mt-3 text-sm text-sauge-dark">Merci ! Votre code GLOW10 arrive par e-mail.</p>
+    }
+  </div>
+</section>

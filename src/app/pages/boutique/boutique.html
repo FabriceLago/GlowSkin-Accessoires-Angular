@@ -1,0 +1,126 @@
+<section class="border-b border-dore/20 bg-sauge-light/15 py-14 text-center">
+  <p class="eyebrow">La boutique</p>
+  <h1 class="mt-3 font-serif text-4xl text-brun sm:text-5xl">Tous nos accessoires</h1>
+  <p class="mx-auto mt-3 max-w-md text-sm text-brun/60">
+    {{ filteredProducts().length }} produit{{ filteredProducts().length > 1 ? 's' : '' }} sélectionné{{ filteredProducts().length > 1 ? 's' : '' }} avec soin.
+  </p>
+</section>
+
+<div class="container-editorial flex flex-col gap-10 py-12 lg:flex-row">
+  <!-- Filtres -->
+  <aside class="lg:w-64 lg:shrink-0">
+    <button
+      type="button"
+      (click)="isFiltersOpen.set(!isFiltersOpen())"
+      class="flex w-full items-center justify-between rounded-full border border-brun/15 px-5 py-3 text-sm text-brun lg:hidden"
+    >
+      Filtres
+      <svg
+        width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        class="transition-transform duration-300"
+        [class.rotate-180]="isFiltersOpen()"
+      ><path d="m6 9 6 6 6-6" /></svg>
+    </button>
+
+    <div [class.hidden]="!isFiltersOpen()" class="mt-6 space-y-8 lg:mt-0 lg:block">
+      <div>
+        <h3 class="eyebrow !text-brun">Catégorie</h3>
+        <div class="mt-3 space-y-2">
+          @for (cat of categories; track cat.value) {
+            <label class="flex cursor-pointer items-center gap-2.5 text-sm text-brun/70">
+              <input
+                type="checkbox"
+                class="h-4 w-4 rounded border-brun/30 accent-dore focus:ring-dore"
+                [checked]="selectedCategories().includes(cat.value)"
+                (change)="toggleCategory(cat.value)"
+              />
+              {{ cat.label }}
+            </label>
+          }
+        </div>
+      </div>
+
+      <div class="border-t border-dore/15 pt-8">
+        <h3 class="eyebrow !text-brun">Matériau</h3>
+        <div class="mt-3 space-y-2">
+          @for (mat of materials; track mat.value) {
+            <label class="flex cursor-pointer items-center gap-2.5 text-sm text-brun/70">
+              <input
+                type="checkbox"
+                class="h-4 w-4 rounded border-brun/30 accent-dore focus:ring-dore"
+                [checked]="selectedMaterials().includes(mat.value)"
+                (change)="toggleMaterial(mat.value)"
+              />
+              {{ mat.label }}
+            </label>
+          }
+        </div>
+      </div>
+
+      <div class="border-t border-dore/15 pt-8">
+        <h3 class="eyebrow !text-brun">Prix maximum</h3>
+        <input
+          type="range"
+          min="12"
+          max="100"
+          class="mt-3 w-full accent-dore"
+          [value]="maxPrice()"
+          (input)="onMaxPriceChange(+$any($event.target).value)"
+        />
+        <p class="mt-1 text-sm text-brun/60">Jusqu'à {{ maxPrice() }}&nbsp;€</p>
+      </div>
+
+      <button type="button" (click)="clearFilters()" class="text-sm text-brun/60 underline underline-offset-4 hover:text-brun">
+        Réinitialiser les filtres
+      </button>
+    </div>
+  </aside>
+
+  <!-- Grille produits -->
+  <div class="flex-1">
+    <div class="mb-8 flex items-center justify-between gap-4">
+      <p class="text-sm text-brun/50">Affichage {{ pagedProducts().length }} sur {{ filteredProducts().length }}</p>
+      <div class="relative">
+        <select
+          class="appearance-none rounded-full border border-brun/15 bg-ivory py-2 pl-4 pr-9 text-sm text-brun focus:border-dore focus:outline-none"
+          [value]="sort()"
+          (change)="onSortChange($any($event.target).value)"
+        >
+          <option value="popularite">Popularité</option>
+          <option value="prix-asc">Prix croissant</option>
+          <option value="prix-desc">Prix décroissant</option>
+          <option value="nouveautes">Nouveautés</option>
+        </select>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#3B332C" stroke-width="2" class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2"><path d="m6 9 6 6 6-6" /></svg>
+      </div>
+    </div>
+
+    @if (pagedProducts().length > 0) {
+      <div class="grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 lg:grid-cols-3">
+        @for (product of pagedProducts(); track product.id) {
+          <app-product-card [product]="product" />
+        }
+      </div>
+    } @else {
+      <div class="py-20 text-center text-brun/60">
+        <p>Aucun produit ne correspond à ces filtres.</p>
+        <button type="button" (click)="clearFilters()" class="btn-secondary mt-4">Réinitialiser</button>
+      </div>
+    }
+
+    @if (totalPages() > 1) {
+      <div class="mt-14 flex items-center justify-center gap-2">
+        @for (page of pageNumbers(); track page) {
+          <button
+            type="button"
+            (click)="goToPage(page)"
+            class="flex h-10 w-10 items-center justify-center rounded-full font-serif italic text-base transition-colors"
+            [class]="currentPage() === page ? 'border border-dore text-brun' : 'text-brun/50 hover:bg-sauge-light/30'"
+          >
+            {{ page }}
+          </button>
+        }
+      </div>
+    }
+  </div>
+</div>

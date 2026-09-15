@@ -1,0 +1,48 @@
+@if (article(); as a) {
+  <nav class="container-editorial py-5 text-xs text-brun/50">
+    <a routerLink="/" class="hover:text-brun">Accueil</a> /
+    <a routerLink="/journal" class="hover:text-brun">Journal</a> /
+    <span class="text-brun">{{ a.title }}</span>
+  </nav>
+
+  <article class="container-editorial pb-16">
+    <div class="mx-auto max-w-2xl text-center">
+      <p class="eyebrow">{{ a.category }} · {{ a.readingTime }} min de lecture</p>
+      <h1 class="mt-3 font-serif text-3xl text-brun sm:text-4xl">{{ a.title }}</h1>
+      <p class="mt-3 text-sm text-brun/50">{{ a.date }}</p>
+    </div>
+
+    <div class="mx-auto mt-10 aspect-[16/9] max-w-3xl overflow-hidden rounded-xl2 shadow-diffuse">
+      <img [src]="a.image.url" [alt]="a.image.alt" class="h-full w-full object-cover" />
+    </div>
+
+    <div class="prose mx-auto mt-10 max-w-2xl space-y-5 text-brun/80">
+      @for (paragraph of a.content; track $index) {
+        <p class="leading-relaxed">{{ paragraph }}</p>
+      }
+    </div>
+  </article>
+
+  @if (relatedArticles().length > 0) {
+    <section class="border-t border-dore/20 bg-sauge-light/15 py-16">
+      <div class="container-editorial">
+        <h2 class="font-serif text-2xl text-brun">À lire aussi</h2>
+        <div class="mt-8 grid gap-8 sm:grid-cols-2">
+          @for (related of relatedArticles(); track related.id) {
+            <a [routerLink]="['/journal', related.slug]" class="group block">
+              <div class="aspect-[16/9] overflow-hidden rounded-xl2">
+                <img [src]="related.image.url" [alt]="related.image.alt" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              </div>
+              <h3 class="mt-3 font-serif text-lg text-brun">{{ related.title }}</h3>
+            </a>
+          }
+        </div>
+      </div>
+    </section>
+  }
+} @else {
+  <div class="container-editorial py-24 text-center">
+    <p class="text-brun/60">Article introuvable.</p>
+    <a routerLink="/journal" class="btn-secondary mt-4 inline-flex">Retour au journal</a>
+  </div>
+}

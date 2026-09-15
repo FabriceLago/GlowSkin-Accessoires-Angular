@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    html.has-custom-cursor,
+    html.has-custom-cursor a,
+    html.has-custom-cursor button {
+      cursor: none;
+    }
+  }
+
+  body {
+    @apply bg-sable text-brun font-sans antialiased;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-serif;
+  }
+
+  :focus-visible {
+    outline: 2px solid #C9A24D;
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  .fade-up-init {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  .fade-up-in {
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-kenBurns {
+    animation: kenBurnsGlobal 8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-marquee {
+    animation: marqueeGlobal 28s linear infinite;
+  }
+
+  .divider-gold {
+    @apply border-t border-dore/40;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-brun px-7 py-3 text-sm tracking-wide text-ivory transition-all duration-500 ease-out-smooth hover:bg-sauge-dark;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-brun/30 bg-transparent px-7 py-3 text-sm tracking-wide text-brun transition-all duration-500 ease-out-smooth hover:border-brun hover:bg-brun hover:text-ivory;
+  }
+
+  .container-editorial {
+    @apply mx-auto w-full max-w-[1400px] px-6 sm:px-8 lg:px-12;
+  }
+
+  .eyebrow {
+    @apply relative inline-block text-xs uppercase tracking-[0.3em] text-terracotta;
+    padding-bottom: 0.6em;
+  }
+
+  .eyebrow::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 1px;
+    width: 2.25rem;
+    background: #C9A24D;
+    transform-origin: left center;
+    animation: drawLine 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: inherit;
+  }
+
+  .gesture-ring {
+    @apply pointer-events-none fixed left-0 top-0 z-[100] rounded-full border border-dore;
+    width: 28px;
+    height: 28px;
+    opacity: 0;
+    display: none;
+    transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), height 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease, opacity 0.2s ease, border-color .25s ease;
+    will-change: transform;
+  }
+
+  html.has-custom-cursor .gesture-ring {
+    display: block;
+  }
+
+  .gesture-ring--active {
+    width: 52px;
+    height: 52px;
+    background-color: rgba(201, 162, 77, 0.12);
+    border-color: rgba(201, 162, 77, 0.9);
+  }
+}
+
+@keyframes drawLine {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(24px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes kenBurnsGlobal {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+
+@keyframes marqueeGlobal {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+::selection {
+  background-color: #C9A24D;
+  color: #FFFDF9;
+}
+
+

@@ -1,0 +1,180 @@
+@if (isOrderConfirmed()) {
+  <div class="container-editorial flex min-h-[60vh] flex-col items-center justify-center py-20 text-center">
+    <div class="flex h-16 w-16 items-center justify-center rounded-full bg-sauge-light/40 text-sauge-dark">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5" /></svg>
+    </div>
+    <h1 class="mt-6 font-serif text-3xl text-brun sm:text-4xl">Merci pour votre commande</h1>
+    <p class="mt-3 text-brun/60">Numéro de commande <strong class="text-brun">{{ orderNumber() }}</strong></p>
+    <p class="mt-1 max-w-sm text-sm text-brun/60">Un e-mail de confirmation vous a été envoyé. Votre rituel sera bientôt entre vos mains.</p>
+    <a routerLink="/boutique" class="btn-primary mt-8">Continuer mes achats</a>
+  </div>
+} @else {
+  <section class="border-b border-dore/20 bg-sauge-light/15 py-10 text-center">
+    <h1 class="font-serif text-3xl text-brun sm:text-4xl">Finaliser ma commande</h1>
+    <div class="mx-auto mt-6 flex max-w-sm items-center justify-between text-xs text-brun/50">
+      @for (s of [1, 2, 3]; track s) {
+        <div class="flex flex-1 flex-col items-center gap-1.5">
+          <span
+            class="flex h-9 w-9 items-center justify-center rounded-full font-serif italic text-base"
+            [class]="step() >= s ? 'border border-dore text-brun bg-dore/10' : 'border border-brun/15 text-brun/40'"
+          >
+            {{ s }}
+          </span>
+          <span>{{ s === 1 ? 'Livraison' : s === 2 ? 'Expédition' : 'Paiement' }}</span>
+        </div>
+        @if (s < 3) {
+          <div class="mx-1 h-px flex-1 bg-dore/30"></div>
+        }
+      }
+    </div>
+  </section>
+
+  <div class="container-editorial grid gap-10 py-14 lg:grid-cols-[1fr_360px]">
+    <div>
+      @if (step() === 1) {
+        <div class="space-y-5">
+          <h2 class="font-serif text-xl text-brun">Informations de livraison</h2>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <label class="block text-sm">
+              <span class="text-brun/70">E-mail</span>
+              <input type="email" required class="mt-1 w-full rounded-lg border border-brun/15 px-4 py-2.5 focus:border-dore focus:outline-none" [ngModel]="shipping().email" (ngModelChange)="updateShipping('email', $event)" />
+            </label>
+            <label class="block text-sm">
+              <span class="text-brun/70">Téléphone</span>
+              <input type="tel" class="mt-1 w-full rounded-lg border border-brun/15 px-4 py-2.5 focus:border-dore focus:outline-none" [ngModel]="shipping().phone" (ngModelChange)="updateShipping('phone', $event)" />
+            </label>
+            <label class="block text-sm">
+              <span class="text-brun/70">Prénom</span>
+              <input type="text" required class="mt-1 w-full rounded-lg border border-brun/15 px-4 py-2.5 focus:border-dore focus:outline-none" [ngModel]="shipping().firstName" (ngModelChange)="updateShipping('firstName', $event)" />
+            </label>
+            <label class="block text-sm">
+              <span class="text-brun/70">Nom</span>
+              <input type="text" required class="mt-1 w-full rounded-lg border border-brun/15 px-4 py-2.5 focus:border-dore focus:outline-none" [ngModel]="shipping().lastName" (ngModelChange)="updateShipping('lastName', $event)" />
+            </label>
+            <label class="block text-sm sm:col-span-2">
+              <span class="text-brun/70">Adresse</span>
+              <input type="text" required class="mt-1 w-full rounded-lg border border-brun/15 px-4 py-2.5 focus:border-dore focus:outline-none" [ngModel]="shipping().address" (ngModelChange)="updateShipping('address', $event)" />
+            </label>
+            <label class="block text-sm">
+              <span class="text-brun/70">Ville</span>
+              <input type="text" required class="mt-1 w-full rounded-lg border border-brun/15 px-4 py-2.5 focus:border-dore focus:outline-none" [ngModel]="shipping().city" (ngModelChange)="updateShipping('city', $event)" />
+            </label>
+            <label class="block text-sm">
+              <span class="text-brun/70">Code postal</span>
+              <input type="text" required class="mt-1 w-full rounded-lg border border-brun/15 px-4 py-2.5 focus:border-dore focus:outline-none" [ngModel]="shipping().postalCode" (ngModelChange)="updateShipping('postalCode', $event)" />
+            </label>
+            <label class="block text-sm">
+              <span class="text-brun/70">Pays</span>
+              <select class="mt-1 w-full rounded-lg border border-brun/15 px-4 py-2.5 focus:border-dore focus:outline-none" [ngModel]="shipping().country" (ngModelChange)="updateShipping('country', $event)">
+                <option>France</option>
+                <option>Belgique</option>
+                <option>Suisse</option>
+                <option>Luxembourg</option>
+              </select>
+            </label>
+          </div>
+          <button type="button" (click)="goToStep(2)" [disabled]="!isStep1Valid()" class="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-40">
+            Continuer vers l'expédition
+          </button>
+        </div>
+      }
+      @if (step() === 2) {
+        <div class="space-y-5">
+          <h2 class="font-serif text-xl text-brun">Mode d'expédition</h2>
+          <label class="flex cursor-pointer items-center justify-between rounded-xl2 border p-5" [class]="shippingMethod() === 'standard' ? 'border-dore bg-dore/5' : 'border-brun/15'">
+            <span class="flex items-center gap-3">
+              <input type="radio" name="shipping-method" [checked]="shippingMethod() === 'standard'" (change)="shippingMethod.set('standard')" />
+              <span>
+                <span class="block text-brun">Livraison standard (2-4 jours)</span>
+                <span class="block text-xs text-brun/50">Suivi inclus</span>
+              </span>
+            </span>
+            <span class="text-brun">{{ cart.amountToFreeShipping() > 0 ? '4,90 €' : 'Offerte' }}</span>
+          </label>
+          <label class="flex cursor-pointer items-center justify-between rounded-xl2 border p-5" [class]="shippingMethod() === 'express' ? 'border-dore bg-dore/5' : 'border-brun/15'">
+            <span class="flex items-center gap-3">
+              <input type="radio" name="shipping-method" [checked]="shippingMethod() === 'express'" (change)="shippingMethod.set('express')" />
+              <span>
+                <span class="block text-brun">Livraison express (24-48h)</span>
+                <span class="block text-xs text-brun/50">Suivi prioritaire</span>
+              </span>
+            </span>
+            <span class="text-brun">9,90 €</span>
+          </label>
+          <div class="flex gap-3">
+            <button type="button" (click)="goToStep(1)" class="btn-secondary flex-1">Retour</button>
+            <button type="button" (click)="goToStep(3)" class="btn-primary flex-1">Continuer vers le paiement</button>
+          </div>
+        </div>
+      }
+      @if (step() === 3) {
+        <div class="space-y-5">
+          <h2 class="font-serif text-xl text-brun">Paiement</h2>
+          <p class="text-xs text-brun/50">Paiement sécurisé — ceci est un environnement de démonstration, aucune donnée réelle n'est transmise.</p>
+          <label class="block text-sm">
+            <span class="text-brun/70">Nom sur la carte</span>
+            <input type="text" required class="mt-1 w-full rounded-lg border border-brun/15 px-4 py-2.5 focus:border-dore focus:outline-none" [ngModel]="payment().cardName" (ngModelChange)="updatePayment('cardName', $event)" />
+          </label>
+          <label class="block text-sm">
+            <span class="text-brun/70">Numéro de carte</span>
+            <input type="text" required maxlength="19" placeholder="1234 5678 9012 3456" class="mt-1 w-full rounded-lg border border-brun/15 px-4 py-2.5 focus:border-dore focus:outline-none" [ngModel]="payment().cardNumber" (ngModelChange)="updatePayment('cardNumber', $event)" />
+          </label>
+          <div class="grid grid-cols-2 gap-4">
+            <label class="block text-sm">
+              <span class="text-brun/70">Expiration</span>
+              <input type="text" required placeholder="MM/AA" class="mt-1 w-full rounded-lg border border-brun/15 px-4 py-2.5 focus:border-dore focus:outline-none" [ngModel]="payment().expiry" (ngModelChange)="updatePayment('expiry', $event)" />
+            </label>
+            <label class="block text-sm">
+              <span class="text-brun/70">CVC</span>
+              <input type="text" required maxlength="4" placeholder="123" class="mt-1 w-full rounded-lg border border-brun/15 px-4 py-2.5 focus:border-dore focus:outline-none" [ngModel]="payment().cvc" (ngModelChange)="updatePayment('cvc', $event)" />
+            </label>
+          </div>
+          <div class="flex gap-3">
+            <button type="button" (click)="goToStep(2)" class="btn-secondary flex-1">Retour</button>
+            <button type="button" (click)="confirmOrder()" [disabled]="!isStep3Valid()" class="btn-primary flex-1 disabled:cursor-not-allowed disabled:opacity-40">
+              Confirmer la commande
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+    <aside class="h-fit rounded-xl2 border border-dore/20 bg-sable p-6">
+      <h2 class="font-serif text-xl text-brun">Récapitulatif</h2>
+      <ul class="mt-4 space-y-3">
+        @for (item of cart.items(); track item.product.id + item.variantId) {
+          <li class="flex items-center gap-3">
+            <div class="h-14 w-12 shrink-0 overflow-hidden rounded-lg bg-sauge-light/20">
+              <img [src]="item.product.images[0].url" [alt]="item.product.images[0].alt" class="h-full w-full object-cover" />
+            </div>
+            <div class="flex-1 text-sm">
+              <p class="text-brun">{{ item.product.name }}</p>
+              <p class="text-xs text-brun/50">Qté {{ item.quantity }}</p>
+            </div>
+            <p class="text-sm text-brun">{{ item.product.price * item.quantity }}&nbsp;€</p>
+          </li>
+        }
+      </ul>
+      <div class="mt-5 space-y-2 border-t border-dore/20 pt-5 text-sm">
+        <div class="flex justify-between text-brun/70">
+          <span>Sous-total</span>
+          <span>{{ cart.subtotal() | number: '1.0-2' }}&nbsp;€</span>
+        </div>
+        @if (cart.discount() > 0) {
+          <div class="flex justify-between text-sauge-dark">
+            <span>Réduction</span>
+            <span>−{{ cart.discount() | number: '1.0-2' }}&nbsp;€</span>
+          </div>
+        }
+        <div class="flex justify-between text-brun/70">
+          <span>Livraison</span>
+          <span>{{ shippingCost() === 0 ? 'Offerte' : (shippingCost() | number: '1.2-2') + ' €' }}</span>
+        </div>
+      </div>
+      <div class="mt-4 flex justify-between border-t border-dore/20 pt-4 font-serif text-lg text-brun">
+        <span>Total</span>
+        <span>{{ orderTotal() | number: '1.0-2' }}&nbsp;€</span>
+      </div>
+    </aside>
+  </div>
+}

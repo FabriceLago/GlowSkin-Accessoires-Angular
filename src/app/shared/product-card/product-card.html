@@ -1,0 +1,68 @@
+<a
+  [routerLink]="['/produit', product().slug]"
+  class="group block"
+>
+  <div
+    class="relative overflow-hidden rounded-xl2 bg-sauge-light/20"
+    [class]="featured() ? 'aspect-[4/5] sm:aspect-[16/11] lg:aspect-[6/7]' : 'aspect-[4/5]'"
+  >
+    <img
+      [src]="product().images[0].url"
+      [alt]="product().images[0].alt"
+      loading="lazy"
+      class="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ease-out-smooth group-hover:opacity-0"
+    />
+    @if (product().images[1]) {
+      <img
+        [src]="product().images[1].url"
+        [alt]="product().images[1].alt"
+        loading="lazy"
+        class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 ease-out-smooth group-hover:opacity-100"
+      />
+    }
+
+    <div class="absolute left-3 top-3 flex flex-col gap-1.5">
+      @if (product().isBestSeller) {
+        <span class="rounded-full bg-brun/90 px-3 py-1 text-[11px] tracking-wide text-ivory">Best-seller</span>
+      }
+      @if (product().isNew) {
+        <span class="rounded-full bg-terracotta px-3 py-1 text-[11px] tracking-wide text-ivory">Nouveau</span>
+      }
+    </div>
+
+    <button
+      type="button"
+      (click)="toggleWishlist($event)"
+      class="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-ivory/90 text-brun shadow-soft transition-transform duration-300 hover:scale-110"
+      [attr.aria-pressed]="wishlist.isWishlisted(product().id)"
+      [attr.aria-label]="wishlist.isWishlisted(product().id) ? 'Retirer de la liste de souhaits' : 'Ajouter à la liste de souhaits'"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" [attr.fill]="wishlist.isWishlisted(product().id) ? '#C98B6B' : 'none'" stroke="#3B332C" stroke-width="1.5">
+        <path d="M12 21s-7.5-4.6-10-9.3C.3 8 2 4.5 5.6 4c2-.3 3.9.6 5 2.2C11.7 4.6 13.6 3.7 15.6 4c3.6.5 5.3 4 3.6 7.7C16.7 16.4 12 21 12 21z" />
+      </svg>
+    </button>
+
+    <button
+      type="button"
+      (click)="openQuickView($event)"
+      class="absolute inset-x-3 bottom-3 translate-y-3 rounded-full bg-ivory/95 px-4 py-2.5 text-center text-sm tracking-wide text-brun opacity-0 shadow-soft transition-all duration-400 ease-out-smooth group-hover:translate-y-0 group-hover:opacity-100"
+    >
+      Aperçu rapide
+    </button>
+  </div>
+
+  <div [class]="featured() ? 'mt-4 space-y-1 lg:shrink-0' : 'mt-4 space-y-1'">
+    <p class="text-xs uppercase tracking-wider text-brun/50">{{ product().categoryLabel }}</p>
+    <h3 [class]="featured() ? 'font-serif text-2xl text-brun sm:text-3xl' : 'font-serif text-lg text-brun'">{{ product().name }}</h3>
+    <div class="flex items-center gap-2">
+      <app-rating-stars [rating]="product().rating" [size]="13" />
+      <span class="text-xs text-brun/50">({{ product().reviewCount }})</span>
+    </div>
+    <p class="pt-1 text-brun">
+      {{ product().price }}&nbsp;€
+      @if (product().compareAtPrice) {
+        <span class="ml-2 text-sm text-brun/40 line-through">{{ product().compareAtPrice }}&nbsp;€</span>
+      }
+    </p>
+  </div>
+</a>

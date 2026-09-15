@@ -1,0 +1,201 @@
+@if (product(); as p) {
+  <nav class="container-editorial py-5 text-xs text-brun/50">
+    <a routerLink="/" class="hover:text-brun">Accueil</a> /
+    <a routerLink="/boutique" class="hover:text-brun">Boutique</a> /
+    <span class="text-brun">{{ p.name }}</span>
+  </nav>
+
+  <div class="container-editorial grid gap-10 pb-16 md:grid-cols-2 md:gap-12 lg:gap-16">
+    <!-- Galerie -->
+    <div>
+      <div
+        class="aspect-square cursor-zoom-in overflow-hidden rounded-xl2 bg-sauge-light/20"
+        (click)="toggleZoom()"
+      >
+        <img
+          [src]="p.images[activeImageIndex()].url"
+          [alt]="p.images[activeImageIndex()].alt"
+          class="h-full w-full object-cover transition-transform duration-500"
+          [class.scale-150]="isZoomed()"
+        />
+      </div>
+      @if (p.images.length > 1) {
+        <div class="mt-4 flex gap-3">
+          @for (img of p.images; track img.url; let i = $index) {
+            <button
+              type="button"
+              (click)="selectImage(i)"
+              class="h-20 w-20 overflow-hidden rounded-lg border-2 transition-colors"
+              [class]="activeImageIndex() === i ? 'border-dore' : 'border-transparent'"
+            >
+              <img [src]="img.url" [alt]="img.alt" class="h-full w-full object-cover" />
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Infos -->
+    <div>
+      <p class="text-xs uppercase tracking-wider text-brun/50">{{ p.categoryLabel }} · {{ p.materialLabel }}</p>
+      <h1 class="mt-2 font-serif text-3xl text-brun sm:text-4xl">{{ p.name }}</h1>
+      <div class="mt-3 flex items-center gap-3">
+        <app-rating-stars [rating]="p.rating" [size]="16" />
+        <span class="text-sm text-brun/60">{{ p.rating }} · {{ p.reviewCount }} avis</span>
+      </div>
+      <p class="mt-4 font-serif text-2xl text-brun">{{ p.price }}&nbsp;€</p>
+      <p class="mt-4 max-w-md font-serif italic text-base leading-relaxed text-brun/80">{{ p.shortDescription }}</p>
+
+      @if (p.variants.length > 1) {
+        <div class="mt-6">
+          <p class="text-xs uppercase tracking-wider text-brun/50">{{ p.variants[0].type === 'couleur' ? 'Couleur' : 'Matériau' }}</p>
+          <div class="mt-3 flex flex-wrap gap-2">
+            @for (variant of p.variants; track variant.id) {
+              <button
+                type="button"
+                (click)="selectedVariantId.set(variant.id)"
+                class="flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition-colors"
+                [class]="selectedVariantId() === variant.id ? 'border-dore bg-dore/10 text-brun ring-1 ring-dore' : 'border-brun/20 text-brun hover:border-brun/50'"
+              >
+                @if (variant.hex) {
+                  <span class="h-3.5 w-3.5 rounded-full border border-ivory/40" [style.background]="variant.hex"></span>
+                }
+                {{ variant.label }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      <div class="mt-6 flex items-center gap-2 text-xs">
+        @if (p.stock > 10) {
+          <span class="h-2 w-2 rounded-full bg-sauge-dark"></span>
+          <span class="text-sauge-dark">En stock</span>
+        } @else if (p.stock > 0) {
+          <span class="h-2 w-2 rounded-full bg-terracotta"></span>
+          <span class="text-terracotta">Plus que {{ p.stock }} en stock</span>
+        } @else {
+          <span class="h-2 w-2 rounded-full bg-brun/40"></span>
+          <span class="text-brun/40">Rupture de stock</span>
+        }
+      </div>
+
+      <div class="mt-6 flex items-center gap-3">
+        <div class="flex items-center rounded-full border border-brun/15">
+          <button type="button" class="px-4 py-3 text-brun/70 hover:text-brun" (click)="decreaseQuantity()" aria-label="Diminuer la quantité">−</button>
+          <span class="w-8 text-center">{{ quantity() }}</span>
+          <button type="button" class="px-4 py-3 text-brun/70 hover:text-brun" (click)="increaseQuantity()" aria-label="Augmenter la quantité">+</button>
+        </div>
+        <button type="button" (click)="addToCart()" class="btn-primary flex-1" [disabled]="p.stock === 0">
+          {{ justAdded() ? 'Ajouté au panier ✓' : 'Ajouter au panier' }}
+        </button>
+        <button
+          type="button"
+          (click)="wishlist.toggle(p.id)"
+          class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-brun/15 text-brun transition-colors hover:border-terracotta"
+          [attr.aria-pressed]="wishlist.isWishlisted(p.id)"
+          aria-label="Ajouter à la liste de souhaits"
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18" [attr.fill]="wishlist.isWishlisted(p.id) ? '#C98B6B' : 'none'" stroke="#3B332C" stroke-width="1.5">
+            <path d="M12 21s-7.5-4.6-10-9.3C.3 8 2 4.5 5.6 4c2-.3 3.9.6 5 2.2C11.7 4.6 13.6 3.7 15.6 4c3.6.5 5.3 4 3.6 7.7C16.7 16.4 12 21 12 21z" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="mt-8 grid grid-cols-3 gap-3 border-t border-dore/20 pt-6 text-center text-xs text-brun/60">
+        <div><p class="font-serif text-lg text-brun">30j</p>Retours gratuits</div>
+        <div><p class="font-serif text-lg text-brun">49€</p>Livraison offerte</div>
+        <div><p class="font-serif text-lg text-brun">3x</p>Paiement sans frais</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Onglets -->
+  <div class="container-editorial pb-16">
+    <div class="flex flex-wrap gap-6 border-b border-dore/20">
+      @for (tab of [
+        { key: 'description', label: 'Description' },
+        { key: 'utilisation', label: 'Utilisation' },
+        { key: 'entretien', label: 'Entretien' },
+        { key: 'avis', label: 'Avis (' + p.reviewCount + ')' }
+      ]; track tab.key) {
+        <button
+          type="button"
+          (click)="activeTab.set($any(tab.key))"
+          class="border-b-2 pb-3 text-sm transition-colors"
+          [class]="activeTab() === tab.key ? 'border-dore text-brun' : 'border-transparent text-brun/50 hover:text-brun'"
+        >
+          {{ tab.label }}
+        </button>
+      }
+    </div>
+
+    <div class="max-w-2xl py-8 text-sm leading-relaxed text-brun/70">
+      @switch (activeTab()) {
+        @case ('description') {
+          <p>{{ p.description }}</p>
+        }
+        @case ('utilisation') {
+          <p>{{ p.usage }}</p>
+        }
+        @case ('entretien') {
+          <p>{{ p.care }}</p>
+        }
+        @case ('avis') {
+          <div class="space-y-8">
+            <div class="flex flex-wrap items-center gap-8">
+              <div class="text-center">
+                <p class="font-serif text-4xl text-brun">{{ p.rating }}</p>
+                <app-rating-stars [rating]="p.rating" [size]="14" />
+                <p class="mt-1 text-xs text-brun/50">{{ p.reviewCount }} avis</p>
+              </div>
+              <div class="flex-1 space-y-1.5">
+                @for (row of ratingDistribution(); track row.star) {
+                  <div class="flex items-center gap-3 text-xs text-brun/60">
+                    <span class="w-10">{{ row.star }}&nbsp;★</span>
+                    <div class="h-1.5 flex-1 overflow-hidden rounded-full bg-sauge-light/30">
+                      <div class="h-full rounded-full bg-dore" [style.width.%]="row.percent"></div>
+                    </div>
+                    <span class="w-6 text-right">{{ row.count }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <ul class="space-y-6">
+              @for (review of p.reviews; track review.id) {
+                <li class="border-t border-dore/10 pt-6">
+                  <div class="flex items-center justify-between">
+                    <p class="font-serif text-brun">{{ review.author }}</p>
+                    <span class="text-xs text-brun/40">{{ review.date }}</span>
+                  </div>
+                  <app-rating-stars [rating]="review.rating" [size]="12" />
+                  <p class="mt-2 text-brun/70">{{ review.comment }}</p>
+                </li>
+              }
+            </ul>
+          </div>
+        }
+      }
+    </div>
+  </div>
+
+  <!-- Produits complémentaires -->
+  @if (relatedProducts().length > 0) {
+    <section class="border-t border-dore/20 bg-sauge-light/15 py-16">
+      <div class="container-editorial">
+        <h2 class="font-serif text-2xl text-brun">Vous aimerez aussi</h2>
+        <div class="mt-8 grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4">
+          @for (related of relatedProducts(); track related.id) {
+            <app-product-card [product]="related" />
+          }
+        </div>
+      </div>
+    </section>
+  }
+} @else {
+  <div class="container-editorial py-24 text-center">
+    <p class="text-brun/60">Produit introuvable.</p>
+    <a routerLink="/boutique" class="btn-secondary mt-4 inline-flex">Retour à la boutique</a>
+  </div>
+}

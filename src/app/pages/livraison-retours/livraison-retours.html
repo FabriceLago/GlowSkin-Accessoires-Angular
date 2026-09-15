@@ -1,0 +1,40 @@
+<section class="border-b border-dore/20 bg-sauge-light/15 py-14 text-center">
+  <h1 class="font-serif text-4xl text-brun sm:text-5xl">Livraison &amp; retours</h1>
+</section>
+
+<div class="container-editorial max-w-3xl py-16">
+  <h2 class="font-serif text-2xl text-brun">Délais et tarifs de livraison</h2>
+  <div class="mt-6 overflow-hidden rounded-xl2 border border-dore/20">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-sauge-light/20 text-brun/70">
+        <tr>
+          <th class="px-5 py-3 font-normal">Zone</th>
+          <th class="px-5 py-3 font-normal">Délai</th>
+          <th class="px-5 py-3 font-normal">Tarif</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-dore/15">
+        @for (option of shippingOptions; track option.zone) {
+          <tr>
+            <td class="px-5 py-4 text-brun">{{ option.zone }}</td>
+            <td class="px-5 py-4 text-brun/70">{{ option.delay }}</td>
+            <td class="px-5 py-4 text-brun/70">{{ option.price }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="mt-16 font-serif text-2xl text-brun">Comment retourner un article</h2>
+  <div class="mt-6 space-y-8">
+    @for (step of returnSteps; track step.title; let i = $index) {
+      <div class="flex gap-5">
+        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sauge-light/40 font-serif text-sauge-dark">{{ i + 1 }}</span>
+        <div>
+          <h3 class="font-serif text-lg text-brun">{{ step.title }}</h3>
+          <p class="mt-1 text-sm leading-relaxed text-brun/70">{{ step.text }}</p>
+        </div>
+      </div>
+    }
+  </div>
+</div>

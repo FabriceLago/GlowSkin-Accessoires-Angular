@@ -1,0 +1,53 @@
+<footer class="border-t border-dore/20 bg-brun text-ivory">
+  <div class="container-editorial grid gap-12 py-16 lg:grid-cols-4">
+    <div class="lg:col-span-2">
+      <span class="font-serif text-2xl">GlowSkin Accessoires</span>
+      <p class="mt-4 max-w-sm text-sm leading-relaxed text-ivory/70">
+        Le geste avant le produit. Des accessoires de soin naturels, pensés pour ralentir et retrouver un rituel beauté sensoriel, sans promesse médicale ni discount agressif.
+      </p>
+      <form (submit)="onSubmit($event)" class="mt-6 flex max-w-sm gap-2">
+        <input
+          type="email"
+          required
+          placeholder="Votre e-mail"
+          class="w-full rounded-full border border-ivory/20 bg-transparent px-4 py-2.5 text-sm text-ivory placeholder:text-ivory/40 focus:border-dore focus:outline-none"
+          [value]="email()"
+          (input)="email.set($any($event.target).value)"
+        />
+        <button type="submit" class="shrink-0 rounded-full bg-dore px-5 py-2.5 text-sm text-brun transition-colors hover:bg-dore-light">
+          Envoyer
+        </button>
+      </form>
+      @if (submitted()) {
+        <p class="mt-2 text-xs text-dore">Merci ! Votre code -10% arrive par e-mail.</p>
+      }
+    </div>
+
+    <div>
+      <h3 class="text-sm uppercase tracking-wider text-dore">Boutique</h3>
+      <ul class="mt-4 space-y-2.5 text-sm text-ivory/70">
+        <li><a routerLink="/boutique" class="transition-colors hover:text-ivory">Tous les produits</a></li>
+        <li><a routerLink="/le-rituel" class="transition-colors hover:text-ivory">Le Rituel</a></li>
+        <li><a routerLink="/journal" class="transition-colors hover:text-ivory">Journal</a></li>
+        <li><a routerLink="/panier" class="transition-colors hover:text-ivory">Mon panier</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-sm uppercase tracking-wider text-dore">Aide</h3>
+      <ul class="mt-4 space-y-2.5 text-sm text-ivory/70">
+        <li><a routerLink="/faq" class="transition-colors hover:text-ivory">FAQ</a></li>
+        <li><a routerLink="/contact" class="transition-colors hover:text-ivory">Contact</a></li>
+        <li><a routerLink="/livraison-retours" class="transition-colors hover:text-ivory">Livraison &amp; retours</a></li>
+        <li><a routerLink="/cgv" class="transition-colors hover:text-ivory">CGV</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-ivory/10">
+    <div class="container-editorial flex flex-col items-center justify-between gap-4 py-6 text-xs text-ivory/50 sm:flex-row">
+      <p>© {{ 2026 }} GlowSkin Accessoires. Tous droits réservés.</p>
+      <p>Paiement sécurisé · Livraison offerte dès 49€ · Retours sous 30 jours</p>
+    </div>
+  </div>
+</footer>

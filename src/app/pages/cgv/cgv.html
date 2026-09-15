@@ -1,0 +1,13 @@
+<section class="border-b border-dore/20 bg-sauge-light/15 py-14 text-center">
+  <h1 class="font-serif text-4xl text-brun">Conditions générales de vente</h1>
+  <p class="mt-2 text-sm text-brun/50">Dernière mise à jour : 1er août 2026</p>
+</section>
+
+<div class="container-editorial max-w-2xl space-y-8 py-16">
+  @for (section of sections; track section.title) {
+    <div>
+      <h2 class="font-serif text-xl text-brun">{{ section.title }}</h2>
+      <p class="mt-2 text-sm leading-relaxed text-brun/70">{{ section.text }}</p>
+    </div>
+  }
+</div>
