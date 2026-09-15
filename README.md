@@ -2,6 +2,10 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.8.
 
+## Deployment
+
+Deployed on Vercel, linked to this repository's `master` branch — every push triggers an automatic build and deploy.
+
 ## Development server
 
 To start a local development server, run:
