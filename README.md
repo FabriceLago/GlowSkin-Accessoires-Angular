@@ -4,7 +4,7 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 
 ## Deployment
 
-Deployed on Vercel, linked to this repository's `master` branch — every push triggers an automatic build and deploy.
+Deployed on Vercel, linked to this repository's `master` branch — every push triggers an automatic build and deploy. ✓
 
 ## Development server
 
