@@ -1,4 +1,9 @@
 {
+  "framework": "angular",
+  "outputDirectory": "dist/GlowSkin-Accessoires-Angular/browser",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
